@@ -1,0 +1,50 @@
+
+pipeline {
+    agent any // The Jenkins agent where the pipeline will run.
+
+    
+    triggers {
+        githubPush()
+    }
+
+    
+    tools {
+        nodejs "node22" // Updated to use the Node.js 22 version name.
+    }
+
+    stages {
+      
+        stage('Build') {
+            steps {
+                echo 'Building the application...'
+                sh 'npm install' // Install all Node.js dependencies.
+                // You can add build commands here (e.g., 'npm run build' for a frontend project).
+                echo 'Build complete.'
+            }
+        }
+
+       
+        stage('Deploy') {
+            steps {
+                echo 'Deploying to AWS Elastic Beanstalk...'
+
+          
+                withAWS(credentials: 'aws-jenks') {
+                   
+                    elasticBeanstalk(
+                       
+                        application: 'pipeline-project', 
+                      
+                        environment: 'pipeline-project-env', 
+                       
+                        beanstalkPath: '.', 
+                      
+                        versionLabel: "jenkins-build-${env.BUILD_NUMBER}"
+                    )
+                }
+
+                echo 'Deployment complete.'
+            }
+        }
+    }
+}
