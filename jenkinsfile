@@ -7,10 +7,6 @@ pipeline {
         githubPush()
     }
 
-    
-    tools {
-        nodejs "node22" 
-    }
 
     stages {
       
