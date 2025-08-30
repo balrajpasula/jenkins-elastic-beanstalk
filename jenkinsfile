@@ -17,7 +17,7 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building the application...'
-                sh 'npm install' // Install all Node.js dependencies.
+                sh 'npm install'
                 
                 echo 'Build complete.'
             }
